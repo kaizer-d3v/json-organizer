@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JSON Structure Builder</title>
+<style>
+@import url('https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.19/300,400,500,600,700/index.css');
+@import url('https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.0.18/400,500,600/index.css');
+
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+
+  --bg-canvas: #f0f1f3;
+  --bg-surface: #ffffff;
+  --bg-surface-alt: #f8f9fa;
+  --bg-elevated: #ffffff;
+  --bg-info: #e8f0fe;
+  --bg-hover: #f1f3f5;
+  --bg-danger: #fce8e6;
+
+  --border-primary: #c9cdd4;
+  --border-secondary: #dfe1e6;
+  --border-tertiary: #e8eaed;
+  --border-focus: #4285f4;
+  --border-danger: #ea4335;
+
+  --text-primary: #1a1a2e;
+  --text-secondary: #5f6368;
+  --text-tertiary: #9aa0a6;
+
+  --accent: #4285f4;
+  --accent-light: #e8f0fe;
+  --accent-hover: #3367d6;
+  --danger: #ea4335;
+  --danger-light: #fce8e6;
+  --success: #34a853;
+  --success-light: #e6f4ea;
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05), 0 0.5px 1px rgba(0,0,0,0.03);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.04);
+  --shadow-lg: 0 12px 36px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+
+  --color-background-primary: var(--bg-surface);
+  --color-background-secondary: var(--bg-surface-alt);
+  --color-background-info: var(--bg-info);
+  --color-border-primary: var(--border-primary);
+  --color-border-secondary: var(--border-secondary);
+  --color-border-tertiary: var(--border-tertiary);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  --border-radius-sm: var(--radius-sm);
+  --border-radius-md: var(--radius-md);
+  --border-radius-lg: var(--radius-lg);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-canvas);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* App Container */
+.app-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header */
+.app-header {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  background: var(--bg-surface);
+  border-radius: var(--radius-xl);
+  border: 0.5px solid var(--border-tertiary);
+  box-shadow: var(--shadow-sm);
+}
+
+.header-icon {
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, #4285f4 0%, #34a853 100%);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(66,133,244,0.25);
+  flex-shrink: 0;
+}
+
+.header-icon svg {
+  width: 24px;
+  height: 24px;
+  fill: white;
+}
+
+.header-info h1 {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.header-info p {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+}
+
+/* Input Section */
+.input-section {
+  margin-bottom: 16px;
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border-tertiary);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+
+.input-section:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.input-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 0.5px solid var(--border-tertiary);
+  background: var(--bg-surface-alt);
+  cursor: pointer;
+  user-select: none;
+}
+
+.input-header:hover {
+  background: var(--bg-hover);
+}
+
+.input-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.input-title svg {
+  width: 16px;
+  height: 16px;
+  color: var(--accent);
+}
+
+.input-body {
+  padding: 16px 20px;
+}
+
+.input-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.input-row:last-child {
+  margin-bottom: 0;
+}
+
+.textarea-wrap {
+  flex: 1;
+  position: relative;
+}
+
+.textarea-wrap textarea {
+  width: 100%;
+  min-height: 120px;
+  max-height: 240px;
+  padding: 12px 14px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background: var(--bg-surface-alt);
+  border: 1.5px solid var(--border-secondary);
+  border-radius: var(--radius-md);
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.textarea-wrap textarea::placeholder {
+  color: var(--text-tertiary);
+}
+
+.textarea-wrap textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(66,133,244,0.1);
+}
+
+.textarea-wrap textarea.valid {
+  border-color: var(--success);
+  background: #f6fdf8;
+}
+
+.textarea-wrap textarea.valid:focus {
+  box-shadow: 0 0 0 3px rgba(52,168,83,0.1);
+}
+
+.textarea-wrap textarea.invalid {
+  border-color: var(--danger);
+  background: #fef8f7;
+}
+
+.textarea-wrap textarea.invalid:focus {
+  box-shadow: 0 0 0 3px rgba(234,67,53,0.1);
+}
+
+.validation-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  margin-top: 8px;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.validation-bar.valid {
+  background: var(--success-light);
+  color: #166534;
+  border: 0.5px solid rgba(52,168,83,0.2);
+}
+
+.validation-bar.invalid {
+  background: var(--danger-light);
+  color: #991b1b;
+  border: 0.5px solid rgba(234,67,53,0.2);
+}
+
+.validation-bar.hidden {
+  display: none;
+}
+
+.validation-bar svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.validation-error {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  opacity: 0.8;
+  word-break: break-word;
+}
+
+.file-upload-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 20px;
+  background: var(--bg-surface-alt);
+  border: 1.5px dashed var(--border-secondary);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: all 0.15s ease;
+  min-width: 160px;
+  min-height: 120px;
+  flex-shrink: 0;
+}
+
+.file-upload-btn:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.file-upload-btn svg {
+  width: 28px;
+  height: 28px;
+  opacity: 0.6;
+}
+
+.file-upload-btn:hover svg {
+  opacity: 1;
+}
+
+.file-upload-btn.loaded {
+  border-color: var(--success);
+  background: var(--success-light);
+  color: #166534;
+}
+
+#file-input {
+  display: none;
+}
+
+/* Action Buttons Row */
+.action-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.btn {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: var(--radius-md);
+  border: 0.5px solid var(--border-secondary);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-primary);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-accent {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-accent:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  box-shadow: 0 4px 12px rgba(66,133,244,0.25);
+}
+
+.btn-danger {
+  background: transparent;
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.btn-danger:hover {
+  background: var(--danger-light);
+  box-shadow: 0 4px 12px rgba(234,67,53,0.15);
+}
+
+.btn-sm {
+  padding: 4px 10px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* Stats bar */
+.stats-bar {
+  display: flex;
+  gap: 16px;
+  padding: 10px 20px;
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  margin-bottom: 16px;
+  border: 0.5px solid var(--border-tertiary);
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.stat-value {
+  font-weight: 700;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}
+
+.stat-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.stat-dot.blue { background: var(--accent); }
+.stat-dot.green { background: var(--success); }
+.stat-dot.purple { background: #8b5cf6; }
+.stat-dot.orange { background: #f59e0b; }
+
+/* Existing Styles */
+.root {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 900px) {
+  .root { grid-template-columns: 1fr; }
+  .app-container { padding: 12px; }
+  .input-row { flex-direction: column; }
+  .file-upload-btn { min-height: 80px; }
+}
+
+.panel {
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.panel:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-border-secondary);
+}
+
+.panel-header {
+  padding: 12px 16px;
+  border-bottom: 0.5px solid var(--color-border-tertiary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-surface-alt);
+}
+
+.panel-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  flex: 1;
+}
+
+.panel-body {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 200px;
+}
+
+.panel-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.panel-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.panel-body::-webkit-scrollbar-thumb {
+  background: var(--border-secondary);
+  border-radius: 3px;
+}
+
+.panel-body::-webkit-scrollbar-thumb:hover {
+  background: var(--border-primary);
+}
+
+/* Field Rows */
+.field-row, .history-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--color-background-secondary);
+  border-radius: var(--border-radius-md);
+  border: 0.5px solid var(--color-border-tertiary);
+  cursor: grab;
+  user-select: none;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.field-row:hover, .history-row:hover {
+  border-color: var(--color-border-primary);
+  background: var(--bg-hover);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+
+.field-row:active, .history-row:active {
+  cursor: grabbing;
+}
+
+.field-row.dragging, .history-row.dragging {
+  opacity: 0.3;
+  transform: scale(0.98);
+}
+
+.field-row.drag-over, .history-row.drag-over {
+  border-color: var(--accent);
+  background: var(--accent-light);
+  box-shadow: 0 0 0 2px rgba(66,133,244,0.15);
+}
+
+.drag-handle {
+  color: var(--color-text-tertiary);
+  font-size: 13px;
+  flex-shrink: 0;
+  cursor: grab;
+  line-height: 1;
+  opacity: 0.6;
+  transition: opacity 0.15s;
+}
+
+.field-row:hover .drag-handle,
+.history-row:hover .drag-handle {
+  opacity: 1;
+}
+
+.field-key {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  color: var(--accent);
+  flex-shrink: 0;
+  font-size: 12px;
+}
+
+.field-val {
+  font-family: var(--font-mono);
+  color: var(--color-text-secondary);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+}
+
+.type-badge {
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 5px;
+  flex-shrink: 0;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: transform 0.15s ease;
+}
+
+.field-row:hover .type-badge {
+  transform: scale(1.05);
+}
+
+.t-string { background: #dbeafe; color: #1e40af; }
+.t-number { background: #dcfce7; color: #166534; }
+.t-array { background: #fce7f3; color: #9d174d; }
+.t-object { background: #ede9fe; color: #5b21b6; }
+.t-null { background: #f1f0e8; color: #57534e; }
+
+.history-label {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--color-text-primary);
+  flex: 1;
+}
+
+.history-preview {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--color-text-tertiary);
+  flex: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.section-lbl {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 6px 4px 2px;
+  margin-top: 4px;
+}
+
+/* Groups */
+.group-block {
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.group-block:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: linear-gradient(180deg, var(--bg-surface-alt) 0%, var(--bg-surface) 100%);
+  border-bottom: 0.5px solid var(--color-border-tertiary);
+}
+
+.group-name-input {
+  background: transparent;
+  border: 1px solid transparent;
+  outline: none;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  flex: 1;
+  min-width: 0;
+  padding: 4px 6px;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s ease;
+}
+
+.group-name-input:hover {
+  background: var(--bg-hover);
+}
+
+.group-name-input:focus {
+  background: var(--bg-surface);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(66,133,244,0.15);
+}
+
+.dz {
+  min-height: 40px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: background 0.15s ease;
+}
+
+.dz.over {
+  background: var(--accent-light);
+  border-top: 1.5px dashed var(--accent);
+}
+
+.placeholder {
+  border: 1.5px dashed var(--color-border-secondary);
+  border-radius: var(--border-radius-md);
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+  transition: all 0.15s ease;
+}
+
+.dz.over .placeholder {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(66,133,244,0.05);
+}
+
+.del-btn {
+  color: var(--color-text-tertiary);
+  opacity: 0.5;
+  font-size: 16px;
+  line-height: 1;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 4px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.del-btn:hover {
+  opacity: 1;
+  color: var(--danger);
+  background: var(--danger-light);
+}
+
+.add-group-btn {
+  width: 100%;
+  padding: 10px;
+  border: 1.5px dashed var(--color-border-secondary);
+  border-radius: var(--border-radius-md);
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  text-align: center;
+  transition: all 0.15s ease;
+  margin-top: 4px;
+}
+
+.add-group-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Toolbar */
+.toolbar {
+  display: flex;
+  gap: 8px;
+  padding: 10px 12px;
+  border-top: 0.5px solid var(--color-border-tertiary);
+  background: var(--bg-surface-alt);
+}
+
+.json-out {
+  padding: 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-text-primary);
+  white-space: pre;
+  overflow: auto;
+  line-height: 1.7;
+  max-height: 240px;
+  background: var(--bg-canvas);
+  border-radius: 0;
+}
+
+.json-out::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.json-out::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.json-out::-webkit-scrollbar-thumb {
+  background: var(--border-secondary);
+  border-radius: 3px;
+}
+
+/* Output Panel */
+.output-panel {
+  margin-top: 16px;
+}
+
+/* Animations */
+@keyframes dropFlash {
+  0% { box-shadow: 0 0 0 0 rgba(66,133,244,0.3); }
+  70% { box-shadow: 0 0 0 8px rgba(66,133,244,0); }
+  100% { box-shadow: 0 0 0 0 rgba(66,133,244,0); }
+}
+
+.drop-flash {
+  animation: dropFlash 0.4s ease;
+}
+
+/* Toast notification */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border-secondary);
+  border-radius: var(--radius-lg);
+  padding: 12px 20px;
+  box-shadow: var(--shadow-lg);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  z-index: 1000;
+  animation: toastIn 0.3s ease, toastOut 0.3s ease 1.5s forwards;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toast svg {
+  width: 18px;
+  height: 18px;
+  color: var(--success);
+  flex-shrink: 0;
+}
+
+.toast.error svg {
+  color: var(--danger);
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(16px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes toastOut {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to { opacity: 0; transform: translateY(8px) scale(0.95); }
+}
+
+/* Drag overlay */
+.drag-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(66,133,244,0.05);
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.drag-overlay.visible {
+  opacity: 1;
+}
+</style>
+</head>
+<body>
+<div class="app-container">
+  <!-- Header -->
+  <div class="app-header">
+    <div class="header-icon">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" fill="none" stroke="white" stroke-width="1.5"/>
+        <polyline points="14 2 14 8 20 8" fill="none" stroke="white" stroke-width="1.5"/>
+        <line x1="8" y1="13" x2="16" y2="13" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="8" y1="17" x2="13" y2="17" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="header-info">
+      <h1>JSON Structure Builder</h1>
+      <p>Upload or paste JSON, validate, and drag & drop to restructure</p>
+    </div>
+  </div>
+
+  <!-- Input Section -->
+  <div class="input-section" id="input-section">
+    <div class="input-header" id="input-header">
+      <div class="input-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="4 7 4 4 20 4 20 7"/>
+          <line x1="9" y1="20" x2="15" y2="20"/>
+          <line x1="12" y1="4" x2="12" y2="20"/>
+        </svg>
+        JSON Input
+      </div>
+      <svg id="collapse-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.2s ease;">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </div>
+    <div class="input-body" id="input-body">
+      <div class="input-row">
+        <div class="textarea-wrap">
+          <textarea id="json-input" placeholder="Paste your JSON here..."></textarea>
+          <div class="validation-bar hidden" id="validation-bar">
+            <svg id="validation-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></svg>
+            <span id="validation-text"></span>
+            <span class="validation-error" id="validation-error" style="display:none;"></span>
+          </div>
+        </div>
+        <label class="file-upload-btn" id="file-label" for="file-input">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+          <span id="file-label-text">Upload JSON file</span>
+        </label>
+        <input type="file" id="file-input" accept=".json,application/json">
+      </div>
+      <div class="action-row">
+        <button class="btn btn-accent" id="load-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          Load & Validate
+        </button>
+        <button class="btn btn-danger" id="clear-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+          </svg>
+          Clear
+        </button>
+        <button class="btn" id="sample-btn">
+          Load Sample
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-bar" id="stats-bar">
+    <div class="stat"><span class="stat-dot blue"></span>Fields: <span class="stat-value" id="stat-fields">0</span></div>
+    <div class="stat"><span class="stat-dot green"></span>History: <span class="stat-value" id="stat-history">0</span></div>
+    <div class="stat"><span class="stat-dot purple"></span>Groups: <span class="stat-value" id="stat-groups">0</span></div>
+    <div class="stat"><span class="stat-dot orange"></span>Items: <span class="stat-value" id="stat-total">0</span></div>
+  </div>
+
+  <!-- Main Grid -->
+  <div class="root">
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">⬡ pool</span>
+        <button class="btn btn-sm" id="reset-btn">↻ reset</button>
+      </div>
+      <div class="panel-body" id="pool"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">⊞ structure</span>
+        <button class="btn btn-sm" id="add-group-btn">+ group</button>
+      </div>
+      <div class="panel-body" id="groups-area"></div>
+      <div class="toolbar">
+        <button class="btn" id="copy-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+          copy JSON ↗
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Output Panel -->
+  <div class="panel output-panel">
+    <div class="panel-header"><span class="panel-title">{ } output preview</span></div>
+    <pre class="json-out" id="json-out"></pre>
+  </div>
+</div>
+
+<div class="drag-overlay" id="drag-overlay"></div>
+
+<script>
+// === Collapsible input ===
+(function(){
+  const header=document.getElementById('input-header');
+  const body=document.getElementById('input-body');
+  const icon=document.getElementById('collapse-icon');
+  header.addEventListener('click',()=>{
+    const collapsed=body.style.display==='none';
+    body.style.display=collapsed?'block':'none';
+    icon.style.transform=collapsed?'rotate(0)':'rotate(180deg)';
+  });
+})();
+
+// === Validation ===
+let isValidJson=false;
+let currentRaw=null;
+
+const jsonInput=document.getElementById('json-input');
+const validationBar=document.getElementById('validation-bar');
+const validationIcon=document.getElementById('validation-icon');
+const validationText=document.getElementById('validation-text');
+const validationError=document.getElementById('validation-error');
+const fileInput=document.getElementById('file-input');
+const fileLabel=document.getElementById('file-label');
+const fileLabelText=document.getElementById('file-label-text');
+
+function showValidation(state, msg, err){
+  validationBar.classList.remove('hidden','valid','invalid');
+  validationBar.classList.add(state);
+  if(state==='valid'){
+    validationIcon.innerHTML='<polyline points="20 6 9 17 4 12"/>';
+    validationText.textContent=msg||'Valid JSON';
+    validationError.style.display='none';
+    jsonInput.classList.remove('invalid');
+    jsonInput.classList.add('valid');
+  } else {
+    validationIcon.innerHTML='<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>';
+    validationText.textContent='Invalid JSON';
+    validationError.style.display='block';
+    validationError.textContent=err||msg||'';
+    jsonInput.classList.remove('valid');
+    jsonInput.classList.add('invalid');
+  }
+  isValidJson=state==='valid';
+}
+
+function hideValidation(){
+  validationBar.classList.add('hidden');
+  validationBar.classList.remove('valid','invalid');
+  jsonInput.classList.remove('valid','invalid');
+  isValidJson=false;
+}
+
+function parseAndValidate(str){
+  if(!str.trim()){hideValidation();return null;}
+  try{
+    const parsed=JSON.parse(str);
+    if(typeof parsed!=='object'||parsed===null){showValidation('invalid','JSON must be an object or array');return null;}
+    showValidation('valid','Valid JSON ✓ ('+Object.keys(parsed).length+' keys)');
+    return parsed;
+  }catch(e){
+    showValidation('invalid','Parse error',e.message);
+    return null;
+  }
+}
+
+// Auto-validate on input with debounce
+let debounceTimer;
+jsonInput.addEventListener('input',()=>{
+  clearTimeout(debounceTimer);
+  debounceTimer=setTimeout(()=>{
+    const parsed=parseAndValidate(jsonInput.value);
+    if(parsed)currentRaw=parsed;
+    else currentRaw=null;
+  },300);
+});
+
+// File upload
+fileInput.addEventListener('change',function(){
+  const file=this.files[0];
+  if(!file)return;
+  fileLabelText.textContent=file.name;
+  fileLabel.classList.add('loaded');
+  const reader=new FileReader();
+  reader.onload=function(e){
+    const text=e.target.result;
+    jsonInput.value=text;
+    const parsed=parseAndValidate(text);
+    if(parsed){
+      currentRaw=parsed;
+      loadJSON(parsed);
+    }
+  };
+  reader.readAsText(file);
+});
+
+// Load button
+document.getElementById('load-btn').addEventListener('click',()=>{
+  const parsed=parseAndValidate(jsonInput.value);
+  if(parsed){
+    currentRaw=parsed;
+    loadJSON(parsed);
+    showToast('JSON loaded successfully!');
+  } else {
+    showToast('Fix JSON errors before loading','error');
+  }
+});
+
+// Clear button
+document.getElementById('clear-btn').addEventListener('click',()=>{
+  jsonInput.value='';
+  hideValidation();
+  fileLabelText.textContent='Upload JSON file';
+  fileLabel.classList.remove('loaded');
+  fileInput.value='';
+  currentRaw=null;
+  pool=[];
+  groups=[];
+  document.getElementById('json-out').textContent='';
+  render();
+  showToast('Cleared','info');
+});
+
+// Sample button
+const SAMPLE_JSON={"jenis":"MESYUARAT","location":"HQ","action":"Daftar Kehadiran","updatedAt":"2026-09-02T13:20:41.678Z","history":[{"tarikh":"02/09/2026","masa":"13:00:00","hari":"Rabu","keterangan":"Daftar Masuk Mesyuarat","jenis":"MESYUARAT"},{"tarikh":"02/09/2026","masa":"15:45:10","hari":"Rabu","keterangan":"Daftar Keluar Mesyuarat","jenis":"MESYUARAT"}]};
+document.getElementById('sample-btn').addEventListener('click',()=>{
+  jsonInput.value=JSON.stringify(SAMPLE_JSON,null,2);
+  const parsed=parseAndValidate(jsonInput.value);
+  if(parsed){
+    currentRaw=parsed;
+    loadJSON(parsed);
+  }
+});
+
+// === Core logic ===
+const RAW=SAMPLE_JSON;
+
+function uid(){return '_'+Math.random().toString(36).slice(2,8)}
+function getType(v){if(v===null)return'null';if(Array.isArray(v))return'array';return typeof v}
+function fmtVal(v){const t=getType(v);if(t==='array')return`[${v.length}]`;if(t==='object')return'{…}';const s=String(v);return s.length>22?s.slice(0,22)+'…':s}
+function previewEntry(e){return Object.entries(e).map(([k,v])=>`${k}:${fmtVal(v)}`).join(' · ')}
+
+let pool=[];
+let groups=[];
+let drag=null;
+
+function loadJSON(data){
+  RAW=data;
+  initState();
+  render();
+}
+
+function initState(){
+  pool=[];
+  groups=[];
+  const d=currentRaw||RAW;
+  Object.keys(d).forEach(k=>{
+    if(k==='history') return;
+    pool.push({id:uid(),kind:'field',key:k,val:d[k]});
+  });
+  (d.history||[]).forEach((entry,i)=>{
+    pool.push({id:uid(),kind:'history',label:`history[${i}]`,entry});
+  });
+}
+
+function removeFromPool(id){const i=pool.findIndex(x=>x.id===id);if(i>-1)pool.splice(i,1)}
+function removeFromGroups(id){groups.forEach(g=>{const i=g.items.findIndex(x=>x.id===id);if(i>-1)g.items.splice(i,1)})}
+function findItem(id){return pool.find(x=>x.id===id)||groups.flatMap(g=>g.items).find(x=>x.id===id)}
+
+function updateStats(){
+  const fields=pool.filter(x=>x.kind==='field').length;
+  const hist=pool.filter(x=>x.kind==='history').length;
+  const grpCount=groups.length;
+  const grpItems=groups.reduce((s,g)=>s+g.items.length,0);
+  document.getElementById('stat-fields').textContent=fields;
+  document.getElementById('stat-history').textContent=hist;
+  document.getElementById('stat-groups').textContent=grpCount;
+  document.getElementById('stat-total').textContent=fields+hist+grpItems;
+}
+
+function renderPool(){
+  const el=document.getElementById('pool');
+  el.innerHTML='';
+  const fields=pool.filter(x=>x.kind==='field');
+  const histItems=pool.filter(x=>x.kind==='history');
+  if(fields.length){
+    const lbl=document.createElement('div');lbl.className='section-lbl';lbl.textContent='top-level fields';el.appendChild(lbl);
+    fields.forEach(f=>el.appendChild(makeRow(f)));
+  }
+  if(histItems.length){
+    const lbl=document.createElement('div');lbl.className='section-lbl';lbl.textContent='history entries';el.appendChild(lbl);
+    histItems.forEach(f=>el.appendChild(makeRow(f)));
+  }
+  if(!fields.length&&!histItems.length){
+    const empty=document.createElement('div');empty.style.cssText='font-size:11px;color:var(--color-text-tertiary);padding:12px 4px;text-align:center';empty.textContent='✓ all items grouped';el.appendChild(empty);
+  }
+}
+
+function makeRow(item,inGroup){
+  const row=document.createElement('div');
+  row.draggable=true;
+  if(item.kind==='history'){
+    row.className='history-row';
+    row.innerHTML=`<span class="drag-handle">⠿</span><span class="history-label">${item.label}</span><span class="history-preview">${previewEntry(item.entry)}</span><span class="type-badge t-array">obj</span>`;
+  } else {
+    const t=getType(item.val);
+    row.className='field-row';
+    row.innerHTML=`<span class="drag-handle">⠿</span><span class="field-key">${item.key}</span><span class="field-val">${fmtVal(item.val)}</span><span class="type-badge t-${t}">${t}</span>`;
+  }
+  row.addEventListener('dragstart',()=>{drag=item.id;row.classList.add('dragging')});
+  row.addEventListener('dragend',()=>{drag=null;row.classList.remove('dragging')});
+  row.addEventListener('dragover',e=>{e.preventDefault();row.classList.add('drag-over')});
+  row.addEventListener('dragleave',()=>row.classList.remove('drag-over'));
+  row.addEventListener('drop',e=>{
+    e.preventDefault();row.classList.remove('drag-over');
+    if(!drag||drag===item.id)return;
+    const dragged=findItem(drag);if(!dragged)return;
+    if(inGroup){
+      const g=groups.find(x=>x.id===inGroup);if(!g)return;
+      removeFromPool(drag);removeFromGroups(drag);
+      const toI=g.items.findIndex(x=>x.id===item.id);
+      g.items.splice(toI,0,dragged);
+    } else {
+      removeFromGroups(drag);
+      const toI=pool.findIndex(x=>x.id===item.id);
+      removeFromPool(drag);pool.splice(toI,0,dragged);
+    }
+    render();
+  });
+  if(inGroup){
+    const rb=document.createElement('button');rb.className='del-btn';rb.title='return to pool';rb.textContent='↩';
+    rb.addEventListener('click',()=>{removeFromGroups(item.id);pool.push(item);render()});
+    row.appendChild(rb);
+  }
+  return row;
+}
+
+function renderGroups(){
+  const area=document.getElementById('groups-area');
+  area.innerHTML='';
+  groups.forEach((g,gi)=>{
+    const block=document.createElement('div');block.className='group-block';
+    const gh=document.createElement('div');gh.className='group-header';
+    const ni=document.createElement('input');ni.className='group-name-input';ni.value=g.name;ni.placeholder='group name…';
+    ni.addEventListener('input',()=>{g.name=ni.value;renderOutput()});
+    const db=document.createElement('button');db.className='del-btn';db.textContent='×';db.title='delete group';
+    db.addEventListener('click',()=>{g.items.forEach(x=>pool.push(x));groups.splice(gi,1);render()});
+    gh.innerHTML=`<span class="drag-handle" style="cursor:default">▣</span>`;gh.appendChild(ni);gh.appendChild(db);
+
+    const dz=document.createElement('div');dz.className='dz';
+    if(!g.items.length){const ph=document.createElement('div');ph.className='placeholder';ph.textContent='drop items here';dz.appendChild(ph)}
+    else g.items.forEach(item=>dz.appendChild(makeRow(item,g.id)));
+
+    dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('over')});
+    dz.addEventListener('dragleave',()=>dz.classList.remove('over'));
+    dz.addEventListener('drop',e=>{
+      e.preventDefault();dz.classList.remove('over');
+      if(!drag)return;
+      const dragged=findItem(drag);if(!dragged)return;
+      if(g.items.find(x=>x.id===drag))return;
+      removeFromPool(drag);removeFromGroups(drag);
+      g.items.push(dragged);
+      block.classList.add('drop-flash');
+      setTimeout(()=>block.classList.remove('drop-flash'),400);
+      render();
+    });
+    block.appendChild(gh);block.appendChild(dz);area.appendChild(block);
+  });
+  const ab=document.createElement('button');ab.className='add-group-btn';ab.textContent='+ add group';
+  ab.addEventListener('click',()=>{groups.push({id:uid(),name:'group_'+(groups.length+1),items:[]});render()});
+  area.appendChild(ab);
+}
+
+function renderOutput(){
+  const obj={};
+  groups.forEach(g=>{
+    if(!g.items.length)return;
+    const key=g.name||'unnamed';
+    const hasHistory=g.items.some(x=>x.kind==='history');
+    const hasFields=g.items.some(x=>x.kind==='field');
+    if(hasHistory&&!hasFields){
+      obj[key]=g.items.map(x=>x.entry);
+    } else if(hasFields&&!hasHistory){
+      const sub={};g.items.forEach(x=>{sub[x.key]=x.val});obj[key]=sub;
+    } else {
+      const sub={};
+      g.items.forEach(x=>{
+        if(x.kind==='field')sub[x.key]=x.val;
+        else{if(!sub[x.label])sub[x.label]=x.entry;}
+      });
+      obj[key]=sub;
+    }
+  });
+  pool.forEach(x=>{
+    if(x.kind==='field')obj[x.key]=x.val;
+    else{if(!obj.history)obj.history=[];obj.history.push(x.entry);}
+  });
+  document.getElementById('json-out').textContent=JSON.stringify(obj,null,2);
+}
+
+function render(){renderPool();renderGroups();renderOutput();updateStats()}
+
+document.getElementById('add-group-btn').addEventListener('click',()=>{groups.push({id:uid(),name:'group_'+(groups.length+1),items:[]});render()});
+document.getElementById('reset-btn').addEventListener('click',()=>{initState();render()});
+document.getElementById('copy-btn').addEventListener('click',()=>{
+  const txt=document.getElementById('json-out').textContent;
+  navigator.clipboard.writeText(txt).then(()=>{
+    const b=document.getElementById('copy-btn');b.innerHTML=`
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+      copied!`;
+    showToast('JSON copied to clipboard');
+    setTimeout(()=>{b.innerHTML=`
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+      </svg>
+      copy JSON ↗`;},1500);
+  });
+});
+
+function showToast(msg, type){
+  const existing=document.querySelector('.toast');
+  if(existing)existing.remove();
+  const t=document.createElement('div');
+  t.className='toast';
+  if(type==='error')t.classList.add('error');
+  const iconSvg=type==='error'
+    ?'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>'
+    :'<polyline points="20 6 9 17 4 12"/>';
+  t.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${iconSvg}</svg>${msg}`;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),2000);
+}
+
+// Load sample on init
+jsonInput.value=JSON.stringify(SAMPLE_JSON,null,2);
+parseAndValidate(jsonInput.value);
+initState();render();
+</script>
+</body>
+</html>
