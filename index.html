@@ -1100,7 +1100,7 @@ document.getElementById('clear-btn').addEventListener('click',()=>{
 });
 
 // Sample button
-const SAMPLE_JSON={"jenis":"BLP","location":"home","action":"Daftar Masuk","updatedAt":"2026-04-21T04:04:59.954Z","history":[{"tarikh":"21/04/2026","masa":"08:08:34","hari":"Selasa","keterangan":"Masuk","jenis":"BLP"},{"tarikh":"21/04/2026","masa":"11:39:58","hari":"Selasa","keterangan":"BDRKAB","jenis":"BDRKAB"}]};
+const SAMPLE_JSON={"success":true,"message":"Products retrieved successfully.","data":[{"id":101,"name":"Laptop","price":1299.99},{"id":102,"name":"Mouse","price":29.99}],"pagination":{"page":1,"pageSize":20,"totalItems":105,"totalPages":6,"hasNext":true,"hasPrevious":false}};
 document.getElementById('sample-btn').addEventListener('click',()=>{
   jsonInput.value=JSON.stringify(SAMPLE_JSON,null,2);
   const parsed=parseAndValidate(jsonInput.value);
